@@ -20,7 +20,7 @@ For this deliverable I did the following. I checked the box `[x]` and added a de
 
 - [x] Proper use of Markdown
 - [x] A concise and compelling elevator pitch
-- [ ] Description of key features
+- [x] Description of key features
 - [ ] Description of how you will use each technology
 - [ ] One or more rough sketches of your application. Images must be embedded in this file using Markdown image references.
 
@@ -33,8 +33,6 @@ Have you grown tired of overpriced and complex games when all you want is quick 
 ![Design image](images/specification_mock_up_main_page.png)
 ![Design image](images/specification_mock_up_leaderboard.png)
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-
 ```mermaid
 sequenceDiagram
     actor You
@@ -44,9 +42,11 @@ sequenceDiagram
 
 ### Key features
 
-- Describe your key feature
-- Describe your key feature
-- Describe your key feature
+- Log in and out securely over https.
+- Highscores saved in a database.
+- Highscores shown on a leaderboard, accessible by all users.
+- 2 button gameplay
+- Rhythm based gameplay with notes falling down on a track.
 
 ### Technologies
 
