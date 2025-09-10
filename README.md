@@ -21,10 +21,10 @@ Have you grown tired of overpriced and complex games when all you want is quick 
 
 ### Design
 
-**Main Page**
+<ins>**Main Page**</ins>
 ![Design image](images/specification_mock_up_main_page.png)
 
-**Leaderboards Page**
+<ins>**Leaderboards Page**</ins>
 ![Design image](images/specification_mock_up_leaderboard.png)
 
 
