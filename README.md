@@ -1,8 +1,8 @@
-# Your startup name here
+# Rhythm Game
 
 [My Notes](notes.md)
 
-A brief description of the application here. 
+A simple rhythm game with leaderboards.
 
 
 ## 🚀 Specification Deliverable
@@ -21,10 +21,10 @@ Have you grown tired of overpriced and complex games when all you want is quick 
 
 ### Design
 
-#### Main Page
+**Main Page**
 ![Design image](images/specification_mock_up_main_page.png)
 
-#### Leaderboards Page
+**Leaderboards Page**
 ![Design image](images/specification_mock_up_leaderboard.png)
 
 
