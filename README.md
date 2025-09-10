@@ -13,9 +13,6 @@ A brief description of the application here.
 
 ## 🚀 Specification Deliverable
 
-> [!NOTE]
->  Fill in this sections as the submission artifact for this deliverable. You can refer to this [example](https://github.com/webprogramming260/startup-example/blob/main/README.md) for inspiration.
-
 For this deliverable I did the following. I checked the box `[x]` and added a description for things I completed.
 
 - [x] Proper use of Markdown
@@ -26,18 +23,21 @@ For this deliverable I did the following. I checked the box `[x]` and added a de
 
 ### Elevator pitch
 
-Have you grown tired of overpriced and complex games when all you want is quick fun? This web-based application will give you a convienient and <ins>free</ins> way to relive your bordom with a simplistic rhythm game that will keep you chasing high scores. Hit notes to the beat and try to end up on the leaderboards.
+Have you grown tired of overpriced and complex games when all you want is quick fun? This web-based application will give you a convenient and *free* way to relive your boredom with a simplistic rhythm game that will keep you chasing high scores. Hit notes to the beat and try to end up on the leaderboards.
 
 ### Design
 
+Main Page
 ![Design image](images/specification_mock_up_main_page.png)
+
+Leaderboards Page
 ![Design image](images/specification_mock_up_leaderboard.png)
 
 
 ### Key features
 
-- Log in and out securely over https.
-- Highscores saved in a database.
+- Log in and out securly over HTTPS.
+- High scores saved in a database.
 - Highscores shown on a leaderboard, accessible by all users.
 - 2 button gameplay
 - Rhythm based gameplay with notes falling down on a track.
