@@ -21,8 +21,8 @@ For this deliverable I did the following. I checked the box `[x]` and added a de
 - [x] Proper use of Markdown
 - [x] A concise and compelling elevator pitch
 - [x] Description of key features
-- [ ] Description of how you will use each technology
-- [ ] One or more rough sketches of your application. Images must be embedded in this file using Markdown image references.
+- [x] Description of how you will use each technology
+- [x] One or more rough sketches of your application. Images must be embedded in this file using Markdown image references.
 
 ### Elevator pitch
 
@@ -33,12 +33,6 @@ Have you grown tired of overpriced and complex games when all you want is quick 
 ![Design image](images/specification_mock_up_main_page.png)
 ![Design image](images/specification_mock_up_leaderboard.png)
 
-```mermaid
-sequenceDiagram
-    actor You
-    actor Website
-    You->>Website: Replace this with your design
-```
 
 ### Key features
 
@@ -52,12 +46,12 @@ sequenceDiagram
 
 I am going to use the required technologies in the following ways.
 
-- **HTML** - Description here
-- **CSS** - Description here
-- **React** - Description here
-- **Service** - Description here
-- **DB/Login** - Description here
-- **WebSocket** - Description here
+- **HTML** - Basic structure and layout of the application.
+- **CSS** - Make everything look more visually appealing, including animation, and support different screen sizes.
+- **React** - Build the game interface and reusable components for the game.
+- **Service** - Retrieving and submitting scores to the leaderboard. Register, login, and logout users.
+- **DB/Login** - Securly store users login credentials and highscores. Only allow highscores to be saved by those with an account.
+- **WebSocket** - Broadcast new highscores to all players, which can then be viewed on the leaderboard.
 
 ## 🚀 AWS deliverable
 
