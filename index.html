@@ -12,6 +12,7 @@
  <header>
     <h1>Rhythm Monkey</h1>
     <a href="https://github.com/cfox2021/startup.git">GitHub</a>
+    <br /><br />
 
     <section id="login">
       <form method="post" action="#">
@@ -19,7 +20,7 @@
         <input type="password" placeholder="password" />
         <button type="submit">Login</button>
       </form>
-      <p id="user-display">[username will be displayed here]</p>
+      <p id="user-display">[username will be displayed here, player logs in with http]</p>
     </section>
     <hr />
     <nav>
@@ -37,7 +38,17 @@
 
     <section id="highscore">
       <h2>High Score</h2>
-      <p>[WebSocket updates appear here for logged in player's high score]</p>
+      <p>[Score grabbed from data base when player logs in, then WebSocket updates appear here when player gets new high score]</p>
+    </section>
+
+    <section id="third-party">
+        <h2>Tutorial Video with YouTube Data API</h2>
+        <details>
+            <summary>Show tutorial</summary>
+                <div id="game-outline" style="width:640px;height:360px;border:1px solid black;">
+                    <p>[Tutorial Will be shown here.]</p>
+                </div>
+        </details>
     </section>
 
   </main>
