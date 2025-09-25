@@ -10,11 +10,8 @@
 <body>
 
  <header>
-    <nav>
-      <menu>
-        <li><a href="scores.html">Leaderboard</a></li>
-      </menu>
-    </nav>
+    <h1>Rhythm Monkey</h1>
+    <a href="https://github.com/cfox2021/startup.git">GitHub</a>
 
     <section id="login">
       <form method="post" action="#">
@@ -25,14 +22,23 @@
       <p id="user-display">[username will be displayed here]</p>
     </section>
     <hr />
+    <nav>
+      <menu>
+        <li><a href="leaderboard.html">Leaderboard</a></li>
+      </menu>
+    </nav>
   </header>
 
   <main>
-    <h1>Rhythm Monkey</h1>
 
     <div id="game-outline" style="width:640px;height:480px;border:1px solid black;">
       <p>[Game will be shown here]</p>
     </div>
+
+    <section id="highscore">
+      <h2>High Score</h2>
+      <p>[WebSocket updates appear here for logged in player's high score]</p>
+    </section>
 
   </main>
 
