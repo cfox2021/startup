@@ -57,15 +57,15 @@ For this deliverable I did the following. I checked the box `[x]` and added a de
 
 For this deliverable I did the following. I checked the box `[x]` and added a description for things I completed.
 
-- [ ] **HTML pages** - I did not complete this part of the deliverable.
-- [ ] **Proper HTML element usage** - I did not complete this part of the deliverable.
-- [ ] **Links** - I did not complete this part of the deliverable.
-- [ ] **Text** - I did not complete this part of the deliverable.
-- [ ] **3rd party API placeholder** - I did not complete this part of the deliverable.
-- [ ] **Images** - I did not complete this part of the deliverable.
-- [ ] **Login placeholder** - I did not complete this part of the deliverable.
-- [ ] **DB data placeholder** - I did not complete this part of the deliverable.
-- [ ] **WebSocket placeholder** - I did not complete this part of the deliverable.
+- [x] **HTML pages** - I have a total of 2 web pages, one for the game and one for the leaderboard. The user can log in from either. 
+- [x] **Proper HTML element usage** - My web page contains several different types of HTML elements with proper tags, including a head, title, headers, nav, hyperlinks, buttons, input boxes, and text. 
+- [x] **Links** - The home page houses the game and has a link to the leaderboard page. The leaderboard page has a link to the home page.
+- [x] **Text** - Both pages contain text, including the title of the webpage and text for each of the placeholders with descriptions of what they are for.
+- [x] **3rd party API placeholder** - Placeholder to include embedded video with YouTube Data API
+- [x] **Images** - I added a favicon to project and there is also an image displayed on game page.
+- [x] **Login placeholder** - User can log in in both HTML pages.
+- [x] **DB data placeholder** - Logged in user's high score and the leaderboard scores are initially taken from database.
+- [x] **WebSocket placeholder** - User high score and the leaderboard scores are updated with WebSocket.
 
 ## 🚀 CSS deliverable
 
