@@ -5,3 +5,13 @@ body {
   margin: 0;
   font-family:  "Lucida Console", sans-serif;
 }
+
+header h1 {
+  margin: 0;
+}
+
+header {
+  background-color: #8a6aff;
+  color: #000000;
+  padding: 1em;
+}
