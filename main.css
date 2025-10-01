@@ -11,7 +11,21 @@ header h1 {
 }
 
 header {
-  background-color: #8a6aff;
-  color: #000000;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #000000;
+  color: #ffffff;
+  padding: 1em;
+}
+
+#login {
+  margin-left: auto; /* pushes login section to the far right */
+}
+
+main{
+
+  background-color: #000000;
+  color: #ffffff;
   padding: 1em;
 }
