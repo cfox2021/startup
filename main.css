@@ -13,14 +13,17 @@ header h1 {
 header {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  background-color: #000000;
-  color: #ffffff;
+  background: #000;
+  color: #fff;
   padding: 1em;
 }
 
+#title {
+  margin-left: auto; 
+  margin-right: auto; 
+}
 #login {
-  margin-left: auto; /* pushes login section to the far right */
+  margin-left: auto; 
 }
 
 main{
