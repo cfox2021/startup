@@ -68,3 +68,20 @@ main{
   width: 640px;
   height: 480px;
 }
+
+#highscore,
+#third-party {
+  text-align: center;
+  width: 100%;           /* makes centering apply nicely */
+  max-width: 640px;      /* match the game window width */
+}
+
+#video-outline {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #000;   /* black inside like game box */
+  border: 1px solid #fff;
+  width: 640px;
+  height: 360px;
+}
