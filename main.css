@@ -20,12 +20,12 @@ header {
 }
 
 .top-row {
-  text-align: center; /* centers the title */
+  text-align: center; 
 }
 
 .bottom-row {
   display: flex;
-  justify-content: space-between; /* left and right ends */
+  justify-content: space-between; 
   align-items: center;
 }
 
@@ -53,4 +53,18 @@ main{
   background: #13efff;
   color: #000000;
   padding: 1em;
+  display: flex;
+  flex-direction: column;
+  align-items: center;   
+  gap: 2em;             
+}
+
+#game-outline {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #000;  
+  border: 1px solid #fff; 
+  width: 640px;
+  height: 480px;
 }
