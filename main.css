@@ -2,8 +2,24 @@ body {
   display: flex;
   flex-direction: column;
   min-width: 375px;
+  font-family: "Lucida Console", sans-serif;
+
+  /* multi-stop gradient: top green → middle blue → bottom green */
+  background: linear-gradient(
+    to bottom,
+    #baffc9 5%, 
+    #bae1ff 50%, 
+    #baffc9 100% 
+  );
+}
+
+html, body {
+  height: 100%;
   margin: 0;
-  font-family:  "Lucida Console", sans-serif;
+}
+
+header, main, footer {
+  background: transparent; /* let gradient show through */
 }
 
 header h1 {
@@ -11,12 +27,19 @@ header h1 {
 }
 
 header {
-  background:#baffc9;
   color: #000000;
   padding: 1em;
   display: flex;
   flex-direction: column;
   gap: 0.25em;
+}
+
+
+header hr {
+  border: none;
+  border-top: 2px solid #000;
+  width: 75%;
+  margin: 0.5em auto;
 }
 
 .site_name {
@@ -53,8 +76,6 @@ nav a:hover {
 }
 
 main{
-
-  background:#bae1ff;
   color: #000000;
   padding: 1em;
   display: flex;
@@ -76,15 +97,15 @@ main{
 #highscore,
 #third-party {
   text-align: center;
-  width: 100%;           /* makes centering apply nicely */
-  max-width: 640px;      /* match the game window width */
+  width: 100%; 
+  max-width: 640px;    
 }
 
 #video-outline {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #000;   /* black inside like game box */
+  background-color: #000;  
   border: 1px solid #fff;
   width: 640px;
   height: 360px;
