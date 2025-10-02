@@ -26,7 +26,7 @@ header {
   display: flex;
   justify-content: center; 
   align-items: center;
-  gap: 9em;  
+  gap: 25em;  
 }
 
 .username {
