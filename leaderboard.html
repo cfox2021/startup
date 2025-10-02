@@ -5,51 +5,56 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Rhythm Monkey - Leaderboard</title>
   <link rel="icon" href="favicon.ico" />
+  <link rel="stylesheet" href="main.css" />
 </head>
 
 <body>
 
-<header>
-  <div class="site_name">
-    <h1>Rhythm Monkey</h1>
-    <a href="https://github.com/cfox2021/startup.git" target="_blank">GitHub</a>
-  </div>
+  <header>
+    <div class="site_name">
+      <h1>Rhythm Monkey</h1>
+      <a href="https://github.com/cfox2021/startup.git" target="_blank">GitHub</a>
+    </div>
 
-    <hr/>
+      <hr/>
 
-  <div class="login_leaderboard">
-    <nav>
-      <ul>
-        <li><a href="index.html">Leaderboard</a></li>
-      </ul>
-    </nav>
+    <div class="login_leaderboard">
+      <nav>
+        <ul>
+          <li><a href="index.html">Game</a></li>
+        </ul>
+      </nav>
 
-    <section id="login">
-      <form method="post" action="#">
-        <input type="text" placeholder="username" />
-        <input type="password" placeholder="password" />
-        <button type="submit">Login</button>
-      </form>
-    </section>
-  </div>
+      <section id="login">
+        <form method="post" action="#">
+          <input type="text" placeholder="username" />
+          <input type="password" placeholder="password" />
+          <button type="submit">Login</button>
+        </form>
+      </section>
+    </div>
 
-  <div class="username">
-    <p id="player-username">Welcome, <span>[username]</span></p>
-  </div>
-</header>
+    <div class="username">
+      <p id="player-username">Welcome, <span>[username]</span></p>
+    </div>
+  </header>
 
   <main>
-    <h1>High Scores, updated in real time with Web Socket</h1>
-    <table border="1">
-      <thead>
-        <tr><th>Rank</th><th>Username</th><th>Score</th><th>Date</th></tr>
-      </thead>
-      <tbody>
-        <tr><td>1</td><td>username1</td><td>12000</td><td>2025-09-25</td></tr>
-        <tr><td>2</td><td>username2</td><td>9500</td><td>2025-09-24</td></tr>
-        <tr><td>3</td><td>username3</td><td>500</td><td>2025-09-25</td></tr>
-      </tbody>
-    </table>
+    <h1>High Scores</h1>
+    <p>Updated in real time via WebSocket</p>
+    
+    <div id="leaderboard-container">
+      <table border="1">
+        <thead>
+          <tr><th>Rank</th><th>Username</th><th>Score</th><th>Date</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>1</td><td>username1</td><td>12000</td><td>2025-09-25</td></tr>
+          <tr><td>2</td><td>username2</td><td>9500</td><td>2025-09-24</td></tr>
+          <tr><td>3</td><td>username3</td><td>500</td><td>2025-09-25</td></tr>
+        </tbody>
+      </table>
+    </div>
   </main>
 
   <footer>

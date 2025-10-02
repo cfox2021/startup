@@ -6,9 +6,11 @@ body {
 
   background: linear-gradient(
     to bottom,
-    #baffc9 5%, 
-    #bae1ff 50%, 
-    #baffc9 100% 
+    #baffc9 0%,   /* green at very top */
+    #baffc9 20%,  /* green transitions to blue smoothly */
+    #bae1ff 50%,  /* middle blue */
+    #baffc9 80%,  /* green returns toward bottom */
+    #baffc9 100%  /* green at very bottom */
   );
 }
 
@@ -124,4 +126,26 @@ main{
   border: 1px solid #fff;
   width: 640px;
   height: 360px;
+}
+
+#leaderboard-container {
+  width: 100%;
+  max-width: 640px; 
+  overflow-x: auto;  
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #ffffffaa; 
+}
+
+th, td {
+  padding: 0.5em;
+  text-align: center;
+  border: 1px solid #000;
+}
+
+th {
+  background-color: #baffc9;
 }
