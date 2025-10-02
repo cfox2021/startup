@@ -4,7 +4,6 @@ body {
   min-width: 375px;
   font-family: "Lucida Console", sans-serif;
 
-  /* multi-stop gradient: top green → middle blue → bottom green */
   background: linear-gradient(
     to bottom,
     #baffc9 5%, 
@@ -19,7 +18,7 @@ html, body {
 }
 
 header, main, footer {
-  background: transparent; /* let gradient show through */
+  background: transparent; 
 }
 
 header h1 {
@@ -43,8 +42,21 @@ header hr {
 }
 
 .site_name {
-  text-align: center; 
+  display: flex;
+  align-items: center;
+  justify-content: center; 
+  position: relative;      
 }
+
+.site_name h1 {
+  margin: 0;
+}
+
+.site_name a {
+  position: absolute;
+  right: 5em;              
+}
+
 .login_leaderboard {
   display: flex;
   justify-content: center; 
