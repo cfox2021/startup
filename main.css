@@ -54,15 +54,18 @@ header hr {
 
 .site_name a {
   position: absolute;
-  right: 5em;              
+  right: 1em;               
 }
 
 .login_leaderboard {
   display: flex;
-  justify-content: center; 
-  align-items: center;
-  gap: 25em;  
+  justify-content: space-between; 
+  flex-wrap: wrap;             
+  width: 100%;
+  max-width: 820px;              
+  margin: 0 auto;
 }
+
 
 .username {
   text-align: center;
