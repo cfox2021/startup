@@ -9,10 +9,20 @@
 
 <body>
 
- <header>
+<header>
+  <div class="site_name">
     <h1>Rhythm Monkey</h1>
-    <a href="https://github.com/cfox2021/startup.git" target="_blank" rel="noopener noreferrer">GitHub</a>
-    <br /><br />
+    <a href="https://github.com/cfox2021/startup.git" target="_blank">GitHub</a>
+  </div>
+
+    <hr/>
+
+  <div class="login_leaderboard">
+    <nav>
+      <ul>
+        <li><a href="index.html">Leaderboard</a></li>
+      </ul>
+    </nav>
 
     <section id="login">
       <form method="post" action="#">
@@ -20,15 +30,13 @@
         <input type="password" placeholder="password" />
         <button type="submit">Login</button>
       </form>
-      <p id="user-display">[username will be displayed here if logged in, player logs in with http]</p>
     </section>
-    <hr />
-    <nav>
-    <ul>
-        <li><a href="index.html">Game</a></li>
-    </ul>
-    </nav>
-  </header>
+  </div>
+
+  <div class="username">
+    <p id="player-username">Welcome, <span>[username]</span></p>
+  </div>
+</header>
 
   <main>
     <h1>High Scores, updated in real time with Web Socket</h1>
@@ -43,6 +51,10 @@
       </tbody>
     </table>
   </main>
+
+  <footer>
+  <p>&copy; 2025 Rhythm Monkey. All rights reserved.</p>
+  </footer>
 
 </body>
 </html>
