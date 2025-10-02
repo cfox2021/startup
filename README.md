@@ -71,12 +71,12 @@ For this deliverable I did the following. I checked the box `[x]` and added a de
 
 For this deliverable I did the following. I checked the box `[x]` and added a description for things I completed.
 
-- [ ] **Header, footer, and main content body** - I did not complete this part of the deliverable.
-- [ ] **Navigation elements** - I did not complete this part of the deliverable.
-- [ ] **Responsive to window resizing** - I did not complete this part of the deliverable.
-- [ ] **Application elements** - I did not complete this part of the deliverable.
-- [ ] **Application text content** - I did not complete this part of the deliverable.
-- [ ] **Application images** - I did not complete this part of the deliverable.
+- [x] **Header, footer, and main content body** - I created a single .css file that was able to be used with both my html pages. This includes the gradient background.
+- [x] **Navigation elements** - Links and login/leaderboard section styled and using flex to keep things aligned with window resize.
+- [x] **Responsive to window resizing** - Used flex, max-width, and wrapping so elements adjust properly for smaller screens.  
+- [x] **Application elements** - Centered game, video, and leaderboard sections; added borders and spacing. 
+- [x] **Application text content** - Set the font, text alignment, and spacing for headings, paragraphs, and forms. 
+- [x] **Application images** - Placed images in containers with proper sizing and spacing to fit the layout.
 
 ## 🚀 React part 1: Routing deliverable
 
