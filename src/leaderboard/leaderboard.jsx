@@ -1,3 +1,5 @@
+import React from 'react';
+
 export default function Leaderboard() {
   return(
   <main>
@@ -17,5 +19,5 @@ export default function Leaderboard() {
       </table>
     </div>
   </main>
-  )
+  );
 }

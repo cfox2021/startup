@@ -1,8 +1,10 @@
+import React from 'react';
+
 export default function Game() {
   return(
   <main>
     <div id="game-outline" style="width:960px;height:720px;border:2px solid #baffc9;">
-      <img src="public/game_placeholder.png" alt="Image preview of game" width="700">
+      <img src="public/game_placeholder.png" alt="Image preview of game" width="700"/>
     </div>
 
     <section id="highscore">
@@ -21,5 +23,5 @@ export default function Game() {
     </section>
 
   </main>
-  )
+  );
 }
