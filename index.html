@@ -1,69 +1,16 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Rhythm Monkey - Game</title>
-  <link rel="icon" href="favicon.ico" />
-  <link rel="stylesheet" href="main.css" />
-</head>
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
 
-<body>
-
-<header>
-  <div class="site_name">
-    <h1>Rhythm Monkey</h1>
-    <a href="https://github.com/cfox2021/startup.git" target="_blank">GitHub</a>
-  </div>
-
-    <hr/>
-
-  <div class="login_leaderboard">
-    <nav>
-      <ul>
-        <li><a href="leaderboard.html">Leaderboard</a></li>
-      </ul>
-    </nav>
-
-    <section id="login">
-      <form method="post" action="#">
-        <input type="text" placeholder="username" />
-        <input type="password" placeholder="password" />
-        <button type="submit">Login</button>
-      </form>
-    </section>
-  </div>
-
-  <div class="username">
-    <p id="player-username">Welcome, <span>[username]</span></p>
-  </div>
-</header>
-
-  <main>
-    <div id="game-outline" style="width:960px;height:720px;border:2px solid #baffc9;">
-      <img src="images/game_placeholder.png" alt="Image preview of game" width="700">
-    </div>
-
-    <section id="highscore">
-      <h2>High Score</h2>
-      <p>[Score grabbed from data base when player logs in, then WebSocket updates appear here when player gets new high score]</p>
-    </section>
-
-    <section id="third-party">
-        <h2>Tutorial Video with YouTube Data API</h2>
-        <details>
-            <summary>Show tutorial</summary>
-                <div id="video-outline" style="width:640px;height:360px;border:1px solid black;">
-                    <p>[Tutorial Will be shown here.]</p>
-                </div>
-        </details>
-    </section>
-
-  </main>
-  
-  <footer>
-  <p>&copy; 2025 Rhythm Monkey. All rights reserved.</p>
-  </footer>
-
-</body>
+    <title>Simon React</title>
+  </head>
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root"></div>
+    <script type="module" src="/index.jsx"></script>
+  </body>
 </html>
