@@ -1,10 +1,11 @@
 import React from 'react';
+import '../app.css';
 
 export default function Game() {
   return(
   <main>
-    <div id="game-outline" style="width:960px;height:720px;border:2px solid #baffc9;">
-      <img src="public/game_placeholder.png" alt="Image preview of game" width="700"/>
+    <div id="game-outline" style={{ width: "960px", height: "720px", border: "2px solid #baffc9" }}>
+      <img src="game_placeholder.png" alt="Image preview of game" width="700"/>
     </div>
 
     <section id="highscore">
@@ -16,7 +17,7 @@ export default function Game() {
         <h2>Tutorial Video with YouTube Data API</h2>
         <details>
             <summary>Show tutorial</summary>
-                <div id="video-outline" style="width:640px;height:360px;border:1px solid black;">
+                <div id="video-outline" style={{ width: "640px", height: "360px", border: "1px solid black" }}>
                     <p>[Tutorial Will be shown here.]</p>
                 </div>
         </details>

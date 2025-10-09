@@ -2,8 +2,8 @@ import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './app.css';
 import { BrowserRouter, NavLink, Route, Routes } from 'react-router-dom';
-import { Game } from './game/game';
-import { Leaderboard } from './leaderboard/leaderboard';
+import Game from './game/game';
+import Leaderboard from './leaderboard/leaderboard';
 
 export default function App() {
   return(
