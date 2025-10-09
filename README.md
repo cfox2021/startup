@@ -82,9 +82,9 @@ For this deliverable I did the following. I checked the box `[x]` and added a de
 
 For this deliverable I did the following. I checked the box `[x]` and added a description for things I completed.
 
-- [ ] **Bundled using Vite** - I did not complete this part of the deliverable.
-- [ ] **Components** - I did not complete this part of the deliverable.
-- [ ] **Router** - I did not complete this part of the deliverable.
+- [x] **Bundled using Vite** - I bundled the project and ran it locally for testing and debugging purposes using Vite. This allowed for the site to reload automatically and streamline development.
+- [x] **Components** - I created an App component that houses my header HTML and Game and Leaderboard components that contain my previous page specific HTML. I also created a Header component that is housed in my app.jsx file to change the link displayed on the header depending on which page component is being rendered.
+- [x] **Router** - I used React Router to handle the navigation between the game and the leaderboard pages. The routes render the proper components for '/', '/leaderboard', and a not found page for invalid paths.
 
 ## 🚀 React part 2: Reactivity deliverable
 
