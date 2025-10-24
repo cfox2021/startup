@@ -23,7 +23,7 @@ export default function Game() {
     const moveInterval = setInterval(() => {
       setNotes(prev =>
         prev
-          .map(note => ({ ...note, y: note.y + 7 })) // slower, smoother fall
+          .map(note => ({ ...note, y: note.y + 7 }))
           .filter(note => note.y < 700)
       );
     }, 50);
@@ -46,15 +46,22 @@ export default function Game() {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
-  // Constants for layout
+  // Layout constants
   const containerWidth = 960;
   const bongoWidth = 220;
+  const bongoHeight = 220;
   const bongoGap = 550;
-  const noteSize = 50; // bigger notes
+  const noteSize = 50;
+  const hitZoneSize = 60;
 
-  // Centers of the bongos
-  const leftBongoCenter = containerWidth / 2 - bongoGap / 2;
-  const rightBongoCenter = containerWidth / 2 + bongoGap / 2;
+  // Compute bongo horizontal positions
+  const leftBongoLeft = containerWidth / 2 - bongoGap / 2 - bongoWidth / 2;
+  const rightBongoLeft = containerWidth / 2 + bongoGap / 2 - bongoWidth / 2;
+  const bongoBottom = 65;
+
+  // Hit zone positioning
+  const hitZoneTop = 700 - bongoBottom - bongoHeight + bongoHeight * 0.05; // raised higher
+  const hitZoneHorizontalOffset = 110; // spread further apart
 
   return (
     <main>
@@ -88,17 +95,38 @@ export default function Game() {
                 height: `${noteSize}px`,
                 borderRadius: "50%",
                 backgroundColor: note.side === 'left' ? "red" : "blue",
-                zIndex: 4, // in front of everything
+                zIndex: 4,
               }}
             />
           );
         })}
 
+        {/* Hit zones */}
+        {[
+          leftBongoLeft - hitZoneHorizontalOffset, 
+          rightBongoLeft + hitZoneHorizontalOffset
+        ].map((bongoLeft, idx) => (
+          <div
+            key={idx}
+            style={{
+              position: "absolute",
+              width: `${hitZoneSize}px`,
+              height: `${hitZoneSize}px`,
+              borderRadius: "50%",
+              border: "3px solid white",
+              left: `${bongoLeft + bongoWidth / 2 - hitZoneSize / 2}px`,
+              top: `${hitZoneTop}px`,
+              pointerEvents: "none",
+              zIndex: 5,
+            }}
+          />
+        ))}
+
         {/* Bongos */}
         <div
           style={{
             position: "absolute",
-            bottom: "65px",
+            bottom: `${bongoBottom}px`,
             left: "50%",
             transform: "translateX(-50%)",
             display: "flex",
