@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import '../app.css';
 
-export default function Game() {
+export default function Game({ loggedInUser }) {
   const [handPressed, setHandPressed] = useState({ left: false, right: false });
   const [notes, setNotes] = useState([]);
   const [score, setScore] = useState(0);
@@ -110,6 +110,22 @@ export default function Game() {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [score, combo, multiplier, hitZoneTop]);
 
+  // Save high score locally for logged-in users
+  useEffect(() => {
+    if (!loggedInUser) return;
+
+    const stored = JSON.parse(localStorage.getItem('highscores')) || {};
+    const prevHigh = stored[loggedInUser] || 0;
+
+    if (highScore > prevHigh) {
+      stored[loggedInUser] = highScore;
+      localStorage.setItem('highscores', JSON.stringify(stored));
+
+      // Trigger storage event so leaderboard updates immediately
+      window.dispatchEvent(new Event('storage'));
+    }
+  }, [highScore, loggedInUser]);
+
   return (
     <main>
       <div
@@ -148,7 +164,7 @@ export default function Game() {
           );
         })}
 
-        {/* Score, combo, multiplier inside game */}
+        {/* Score, combo, multiplier */}
         <div style={{ position: "absolute", top: "10px", left: "50%", transform: "translateX(-50%)", color: "white", textAlign: "center", zIndex: 6 }}>
           <div style={{ fontSize: "24px" }}>Score: {score}</div>
           <div style={{ fontSize: "20px" }}>Combo: {combo}</div>
@@ -237,12 +253,10 @@ export default function Game() {
         </div>
       </div>
 
-      {/* High score below game */}
       <section id="highscore" style={{ fontSize: "24px", marginTop: "10px", textAlign: "center" }}>
         High Score: {highScore}
       </section>
 
-      {/* YouTube tutorial section */}
       <section id="third-party" style={{ marginTop: "10px", textAlign: "center" }}>
         <h2>Tutorial Video with YouTube Data API</h2>
         <details>

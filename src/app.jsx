@@ -5,14 +5,12 @@ import { BrowserRouter, NavLink, Route, Routes, useLocation } from 'react-router
 import Game from './game/game';
 import Leaderboard from './leaderboard/leaderboard';
 
-function Header() {
+function Header({ loggedInUser, setLoggedInUser }) {
   const location = useLocation();
   const isOnLeaderboard = location.pathname === '/leaderboard';
 
-  // Mock login state
   const [usernameInput, setUsernameInput] = useState('');
   const [passwordInput, setPasswordInput] = useState('');
-  const [loggedInUser, setLoggedInUser] = useState('');
 
   const handleLogin = (e) => {
     e.preventDefault();
@@ -80,14 +78,16 @@ function Header() {
 }
 
 export default function App() {
+  const [loggedInUser, setLoggedInUser] = useState('');
+
   return (
     <BrowserRouter>
       <div>
-        <Header />
+        <Header loggedInUser={loggedInUser} setLoggedInUser={setLoggedInUser} />
 
         <Routes>
-          <Route path='/' element={<Game />} exact />
-          <Route path='/leaderboard' element={<Leaderboard />} />
+          <Route path='/' element={<Game loggedInUser={loggedInUser} />} exact />
+          <Route path='/leaderboard' element={<Leaderboard loggedInUser={loggedInUser} />} />
           <Route path='*' element={<NotFound />} />
         </Routes>
 
