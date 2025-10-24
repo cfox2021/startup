@@ -90,8 +90,8 @@ For this deliverable I did the following. I checked the box `[x]` and added a de
 
 For this deliverable I did the following. I checked the box `[x]` and added a description for things I completed.
 
-- [ ] **All functionality implemented or mocked out** - I did not complete this part of the deliverable.
-- [ ] **Hooks** - I did not complete this part of the deliverable.
+- [x] **All functionality implemented or mocked out** - I implemented the core game functionality, including falling notes, scoring, hitting notes with left and right hands using f/j, combo/multiplier tracking, and updating highscores. The leaderboard now updates automatically for logged-in users when a new highscore is achieved.
+- [x] **Hooks** - I used useState to manage dynamic state such as scores, combos, and user login, and useEffect to handle timed note movement, key press detection, and saving highscores to localStorage.
 
 ## 🚀 Service deliverable
 
