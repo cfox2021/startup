@@ -7,6 +7,8 @@ export default function Game() {
   const [score, setScore] = useState(0);
   const [combo, setCombo] = useState(0);
   const [highScore, setHighScore] = useState(0);
+  const [multiplier, setMultiplier] = useState(1);        // for scoring
+  const [displayMultiplier, setDisplayMultiplier] = useState(1); // for display
 
   // Layout constants
   const containerWidth = 960;
@@ -19,7 +21,6 @@ export default function Game() {
   const hitZoneTop = 700 - bongoBottom - bongoHeight + bongoHeight * 0.05;
   const hitZoneHorizontalOffset = 110;
 
-  // Compute bongo horizontal positions
   const leftBongoLeft = containerWidth / 2 - bongoGap / 2 - bongoWidth / 2;
   const rightBongoLeft = containerWidth / 2 + bongoGap / 2 - bongoWidth / 2;
 
@@ -36,25 +37,34 @@ export default function Game() {
     return () => clearInterval(interval);
   }, []);
 
-  // Move notes downward and check for missed notes
+  // Move notes downward at ~60 FPS and check for misses
   useEffect(() => {
+    const fps = 60;
+    const interval = 1000 / fps;
+    const fallSpeed = 6;
+
     const moveInterval = setInterval(() => {
       setNotes(prev => {
         const newNotes = prev
-          .map(note => ({ ...note, y: note.y + 4 }))
+          .map(note => ({ ...note, y: note.y + fallSpeed }))
           .filter(note => note.y < 700);
 
-        // Reset combo if a note passes the hit zone without being hit
-        const missed = prev.some(note => note.y + noteSize > hitZoneTop + hitZoneSize);
-        if (missed) setCombo(0);
+        // Reset combo if a note passes the bottom of the hit zone
+        const missed = prev.some(note => note.y > hitZoneTop + hitZoneSize);
+        if (missed) {
+          setCombo(0);
+          setMultiplier(1);
+          setDisplayMultiplier(1);
+        }
 
         return newNotes;
       });
-    }, 15);
+    }, interval);
+
     return () => clearInterval(moveInterval);
   }, []);
 
-  // Handle key presses and scoring
+  // Handle key presses and scoring with multiplier
   useEffect(() => {
     const handleKeyDown = (e) => {
       let side = null;
@@ -77,11 +87,31 @@ export default function Game() {
         });
 
         if (hit) {
-          setScore(prev => prev + 1);
-          setCombo(prev => prev + 1);
-          setHighScore(prev => Math.max(prev, score + 1));
+          const points = 1 * multiplier; // award points using current multiplier
+          const newCombo = combo + 1; // increment combo
+          setScore(prev => prev + points);
+          setCombo(newCombo);
+          setHighScore(prev => Math.max(prev, score + points));
+
+          // Update multiplier for next note (scoring)
+          let newMultiplier = 1;
+          if (newCombo >= 101) newMultiplier = 10;
+          else if (newCombo >= 51) newMultiplier = 5;
+          else if (newCombo >= 26) newMultiplier = 3;
+          else if (newCombo >= 11) newMultiplier = 2;
+          setMultiplier(newMultiplier);
+
+          // Update display multiplier one note earlier
+          let newDisplayMultiplier = 1;
+          if (newCombo >= 10 && newCombo < 25) newDisplayMultiplier = 2;
+          else if (newCombo >= 25 && newCombo < 50) newDisplayMultiplier = 3;
+          else if (newCombo >= 50 && newCombo < 100) newDisplayMultiplier = 5;
+          else if (newCombo >= 100) newDisplayMultiplier = 10;
+          setDisplayMultiplier(newDisplayMultiplier);
         } else {
           setCombo(0);
+          setMultiplier(1);
+          setDisplayMultiplier(1);
         }
 
         return remaining;
@@ -90,7 +120,7 @@ export default function Game() {
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [score, hitZoneTop]);
+  }, [score, combo, multiplier, hitZoneTop]);
 
   return (
     <main>
@@ -215,7 +245,7 @@ export default function Game() {
         </div>
       </div>
 
-      {/* Score / Combo / High Score Section */}
+      {/* Score / Combo / Multiplier / High Score Section */}
       <section
         id="scoreboard"
         style={{
@@ -228,8 +258,11 @@ export default function Game() {
         <div id="current-score" style={{ fontSize: "28px", marginBottom: "10px" }}>
           Score: {score}
         </div>
-        <div id="combo" style={{ fontSize: "22px", marginBottom: "10px" }}>
+        <div id="combo" style={{ fontSize: "22px", marginBottom: "5px" }}>
           Combo: {combo}
+        </div>
+        <div id="multiplier" style={{ fontSize: "20px", marginBottom: "10px" }}>
+          Multiplier: {displayMultiplier}x
         </div>
         <div id="high-score" style={{ fontSize: "24px" }}>
           High Score: {highScore}
