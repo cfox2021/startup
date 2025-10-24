@@ -7,10 +7,9 @@ export default function Game() {
   const [score, setScore] = useState(0);
   const [combo, setCombo] = useState(0);
   const [highScore, setHighScore] = useState(0);
-  const [multiplier, setMultiplier] = useState(1);        // for scoring
-  const [displayMultiplier, setDisplayMultiplier] = useState(1); // for display
+  const [multiplier, setMultiplier] = useState(1);
+  const [displayMultiplier, setDisplayMultiplier] = useState(1);
 
-  // Layout constants
   const containerWidth = 960;
   const bongoWidth = 220;
   const bongoHeight = 220;
@@ -27,17 +26,12 @@ export default function Game() {
   // Spawn falling notes
   useEffect(() => {
     const interval = setInterval(() => {
-      const newNote = {
-        id: Date.now(),
-        side: Math.random() < 0.5 ? 'left' : 'right',
-        y: 0,
-      };
-      setNotes(prev => [...prev, newNote]);
+      setNotes(prev => [...prev, { id: Date.now(), side: Math.random() < 0.5 ? 'left' : 'right', y: 0 }]);
     }, 1200);
     return () => clearInterval(interval);
   }, []);
 
-  // Move notes downward at ~60 FPS and check for misses
+  // Move notes downward
   useEffect(() => {
     const fps = 60;
     const interval = 1000 / fps;
@@ -49,7 +43,6 @@ export default function Game() {
           .map(note => ({ ...note, y: note.y + fallSpeed }))
           .filter(note => note.y < 700);
 
-        // Reset combo if a note passes the bottom of the hit zone
         const missed = prev.some(note => note.y > hitZoneTop + hitZoneSize);
         if (missed) {
           setCombo(0);
@@ -64,7 +57,7 @@ export default function Game() {
     return () => clearInterval(moveInterval);
   }, []);
 
-  // Handle key presses and scoring with multiplier
+  // Handle key presses
   useEffect(() => {
     const handleKeyDown = (e) => {
       let side = null;
@@ -78,22 +71,18 @@ export default function Game() {
       setNotes(prev => {
         let hit = false;
         const remaining = prev.filter(note => {
-          const inZone =
-            note.side === side &&
-            note.y + noteSize >= hitZoneTop &&
-            note.y <= hitZoneTop + hitZoneSize;
+          const inZone = note.side === side && note.y + noteSize >= hitZoneTop && note.y <= hitZoneTop + hitZoneSize;
           if (inZone) hit = true;
           return !inZone;
         });
 
         if (hit) {
-          const points = 1 * multiplier; // award points using current multiplier
-          const newCombo = combo + 1; // increment combo
+          const points = 1 * multiplier;
+          const newCombo = combo + 1;
           setScore(prev => prev + points);
           setCombo(newCombo);
           setHighScore(prev => Math.max(prev, score + points));
 
-          // Update multiplier for next note (scoring)
           let newMultiplier = 1;
           if (newCombo >= 101) newMultiplier = 10;
           else if (newCombo >= 51) newMultiplier = 5;
@@ -101,7 +90,6 @@ export default function Game() {
           else if (newCombo >= 11) newMultiplier = 2;
           setMultiplier(newMultiplier);
 
-          // Update display multiplier one note earlier
           let newDisplayMultiplier = 1;
           if (newCombo >= 10 && newCombo < 25) newDisplayMultiplier = 2;
           else if (newCombo >= 25 && newCombo < 50) newDisplayMultiplier = 3;
@@ -160,11 +148,15 @@ export default function Game() {
           );
         })}
 
+        {/* Score, combo, multiplier inside game */}
+        <div style={{ position: "absolute", top: "10px", left: "50%", transform: "translateX(-50%)", color: "white", textAlign: "center", zIndex: 6 }}>
+          <div style={{ fontSize: "24px" }}>Score: {score}</div>
+          <div style={{ fontSize: "20px" }}>Combo: {combo}</div>
+          <div style={{ fontSize: "18px" }}>Multiplier: {displayMultiplier}x</div>
+        </div>
+
         {/* Hit zones */}
-        {[
-          leftBongoLeft - hitZoneHorizontalOffset,
-          rightBongoLeft + hitZoneHorizontalOffset
-        ].map((bongoLeft, idx) => (
+        {[leftBongoLeft - hitZoneHorizontalOffset, rightBongoLeft + hitZoneHorizontalOffset].map((bongoLeft, idx) => (
           <div
             key={idx}
             style={{
@@ -245,39 +237,21 @@ export default function Game() {
         </div>
       </div>
 
-      {/* Score / Combo / Multiplier / High Score Section */}
-      <section
-        id="scoreboard"
-        style={{
-          width: `${containerWidth}px`,
-          margin: "20px auto",
-          textAlign: "center",
-          color: "black"
-        }}
-      >
-        <div id="current-score" style={{ fontSize: "28px", marginBottom: "10px" }}>
-          Score: {score}
-        </div>
-        <div id="combo" style={{ fontSize: "22px", marginBottom: "5px" }}>
-          Combo: {combo}
-        </div>
-        <div id="multiplier" style={{ fontSize: "20px", marginBottom: "10px" }}>
-          Multiplier: {displayMultiplier}x
-        </div>
-        <div id="high-score" style={{ fontSize: "24px" }}>
-          High Score: {highScore}
-        </div>
+      {/* High score below game */}
+      <section id="highscore" style={{ fontSize: "24px", marginTop: "10px", textAlign: "center" }}>
+        High Score: {highScore}
       </section>
 
-      <section id="third-party">
+      {/* YouTube tutorial section */}
+      <section id="third-party" style={{ marginTop: "10px", textAlign: "center" }}>
         <h2>Tutorial Video with YouTube Data API</h2>
         <details>
           <summary>Show tutorial</summary>
           <div
             id="video-outline"
-            style={{ width: "640px", height: "360px", border: "1px solid black" }}
+            style={{ width: "640px", height: "360px", border: "1px solid black", margin: "10px auto", display: "flex", alignItems: "center", justifyContent: "center", backgroundColor: "#000" }}
           >
-            <p>[Tutorial Will be shown here.]</p>
+            <p style={{ color: "#fff" }}>[Tutorial Will be shown here.]</p>
           </div>
         </details>
       </section>
