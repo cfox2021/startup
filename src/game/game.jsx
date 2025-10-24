@@ -186,9 +186,17 @@ export default function Game() {
         </div>
       </div>
 
-      <section id="highscore">
-        <h2>High Score</h2>
-        <p>[Score grabbed from data base when player logs in, then WebSocket updates appear here when player gets new high score]</p>
+      {/* Score / Combo / High Score Section */}
+      <section id="scoreboard" style={{ width: `${containerWidth}px`, margin: "20px auto", textAlign: "center", color: "black" }}>
+        <div id="current-score" style={{ fontSize: "28px", marginBottom: "10px" }}>
+          Score: 0
+        </div>
+        <div id="combo" style={{ fontSize: "22px", marginBottom: "10px" }}>
+          Combo: 0
+        </div>
+        <div id="high-score" style={{ fontSize: "24px" }}>
+          High Score: 0
+        </div>
       </section>
 
       <section id="third-party">
