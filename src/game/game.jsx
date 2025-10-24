@@ -49,6 +49,20 @@ export default function Game() {
         <div
           style={{
             position: "absolute",
+            bottom: "65px",
+            left: "50%",
+            transform: "translateX(-50%)",
+            display: "flex",
+            gap: "550px"
+          }}
+        >
+          <img src="/bongo_left.png" alt="Left bongo" width="220" />
+          <img src="/bongo_right.png" alt="Right bongo" width="220" />
+        </div>
+
+        <div
+          style={{
+            position: "absolute",
             bottom: "180px",
             left: "50%",
             transform: "translateX(-50%)",
