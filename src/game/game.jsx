@@ -1,7 +1,25 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import '../app.css';
 
 export default function Game() {
+  const [handPressed, setHandPressed] = useState({ left: false, right: false });
+
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'f' || e.key === 'F') {
+        setHandPressed(prev => ({ ...prev, left: true }));
+        setTimeout(() => setHandPressed(prev => ({ ...prev, left: false })), 100);
+      }
+      if (e.key === 'j' || e.key === 'J') {
+        setHandPressed(prev => ({ ...prev, right: true }));
+        setTimeout(() => setHandPressed(prev => ({ ...prev, right: false })), 100);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
+
   return (
     <main>
       <div
@@ -31,7 +49,7 @@ export default function Game() {
         <div
           style={{
             position: "absolute",
-            bottom: "180px", 
+            bottom: "180px",
             left: "50%",
             transform: "translateX(-50%)",
             display: "flex",
@@ -43,11 +61,19 @@ export default function Game() {
             src="/hand_left.png"
             alt="Left hand"
             width="260"
+            style={{
+              transform: handPressed.left ? "translateY(40px)" : "translateY(0px)",
+              transition: "transform 0.08s ease"
+            }}
           />
           <img
             src="/hand_right.png"
             alt="Right hand"
             width="260"
+            style={{
+              transform: handPressed.right ? "translateY(40px)" : "translateY(0px)",
+              transition: "transform 0.08s ease"
+            }}
           />
         </div>
       </div>
