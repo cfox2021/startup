@@ -4,6 +4,24 @@ import '../app.css';
 export default function Game() {
   const [handPressed, setHandPressed] = useState({ left: false, right: false });
   const [notes, setNotes] = useState([]);
+  const [score, setScore] = useState(0);
+  const [combo, setCombo] = useState(0);
+  const [highScore, setHighScore] = useState(0);
+
+  // Layout constants
+  const containerWidth = 960;
+  const bongoWidth = 220;
+  const bongoHeight = 220;
+  const bongoGap = 550;
+  const noteSize = 50;
+  const hitZoneSize = 60;
+  const bongoBottom = 65;
+  const hitZoneTop = 700 - bongoBottom - bongoHeight + bongoHeight * 0.05;
+  const hitZoneHorizontalOffset = 110;
+
+  // Compute bongo horizontal positions
+  const leftBongoLeft = containerWidth / 2 - bongoGap / 2 - bongoWidth / 2;
+  const rightBongoLeft = containerWidth / 2 + bongoGap / 2 - bongoWidth / 2;
 
   // Spawn falling notes
   useEffect(() => {
@@ -18,50 +36,61 @@ export default function Game() {
     return () => clearInterval(interval);
   }, []);
 
-  // Move notes downward
+  // Move notes downward and check for missed notes
   useEffect(() => {
     const moveInterval = setInterval(() => {
-      setNotes(prev =>
-        prev
-          .map(note => ({ ...note, y: note.y + 7 }))
-          .filter(note => note.y < 700)
-      );
-    }, 50);
+      setNotes(prev => {
+        const newNotes = prev
+          .map(note => ({ ...note, y: note.y + 4 }))
+          .filter(note => note.y < 700);
+
+        // Reset combo if a note passes the hit zone without being hit
+        const missed = prev.some(note => note.y + noteSize > hitZoneTop + hitZoneSize);
+        if (missed) setCombo(0);
+
+        return newNotes;
+      });
+    }, 15);
     return () => clearInterval(moveInterval);
   }, []);
 
-  // Key press handling
+  // Handle key presses and scoring
   useEffect(() => {
     const handleKeyDown = (e) => {
-      if (e.key === 'f' || e.key === 'F') {
-        setHandPressed(prev => ({ ...prev, left: true }));
-        setTimeout(() => setHandPressed(prev => ({ ...prev, left: false })), 100);
-      }
-      if (e.key === 'j' || e.key === 'J') {
-        setHandPressed(prev => ({ ...prev, right: true }));
-        setTimeout(() => setHandPressed(prev => ({ ...prev, right: false })), 100);
-      }
+      let side = null;
+      if (e.key === 'f' || e.key === 'F') side = 'left';
+      if (e.key === 'j' || e.key === 'J') side = 'right';
+      if (!side) return;
+
+      setHandPressed(prev => ({ ...prev, [side]: true }));
+      setTimeout(() => setHandPressed(prev => ({ ...prev, [side]: false })), 100);
+
+      setNotes(prev => {
+        let hit = false;
+        const remaining = prev.filter(note => {
+          const inZone =
+            note.side === side &&
+            note.y + noteSize >= hitZoneTop &&
+            note.y <= hitZoneTop + hitZoneSize;
+          if (inZone) hit = true;
+          return !inZone;
+        });
+
+        if (hit) {
+          setScore(prev => prev + 1);
+          setCombo(prev => prev + 1);
+          setHighScore(prev => Math.max(prev, score + 1));
+        } else {
+          setCombo(0);
+        }
+
+        return remaining;
+      });
     };
+
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, []);
-
-  // Layout constants
-  const containerWidth = 960;
-  const bongoWidth = 220;
-  const bongoHeight = 220;
-  const bongoGap = 550;
-  const noteSize = 50;
-  const hitZoneSize = 60;
-
-  // Compute bongo horizontal positions
-  const leftBongoLeft = containerWidth / 2 - bongoGap / 2 - bongoWidth / 2;
-  const rightBongoLeft = containerWidth / 2 + bongoGap / 2 - bongoWidth / 2;
-  const bongoBottom = 65;
-
-  // Hit zone positioning
-  const hitZoneTop = 700 - bongoBottom - bongoHeight + bongoHeight * 0.05; // raised higher
-  const hitZoneHorizontalOffset = 110; // spread further apart
+  }, [score, hitZoneTop]);
 
   return (
     <main>
@@ -103,7 +132,7 @@ export default function Game() {
 
         {/* Hit zones */}
         {[
-          leftBongoLeft - hitZoneHorizontalOffset, 
+          leftBongoLeft - hitZoneHorizontalOffset,
           rightBongoLeft + hitZoneHorizontalOffset
         ].map((bongoLeft, idx) => (
           <div
@@ -187,15 +216,23 @@ export default function Game() {
       </div>
 
       {/* Score / Combo / High Score Section */}
-      <section id="scoreboard" style={{ width: `${containerWidth}px`, margin: "20px auto", textAlign: "center", color: "black" }}>
+      <section
+        id="scoreboard"
+        style={{
+          width: `${containerWidth}px`,
+          margin: "20px auto",
+          textAlign: "center",
+          color: "black"
+        }}
+      >
         <div id="current-score" style={{ fontSize: "28px", marginBottom: "10px" }}>
-          Score: 0
+          Score: {score}
         </div>
         <div id="combo" style={{ fontSize: "22px", marginBottom: "10px" }}>
-          Combo: 0
+          Combo: {combo}
         </div>
         <div id="high-score" style={{ fontSize: "24px" }}>
-          High Score: 0
+          High Score: {highScore}
         </div>
       </section>
 
@@ -203,7 +240,10 @@ export default function Game() {
         <h2>Tutorial Video with YouTube Data API</h2>
         <details>
           <summary>Show tutorial</summary>
-          <div id="video-outline" style={{ width: "640px", height: "360px", border: "1px solid black" }}>
+          <div
+            id="video-outline"
+            style={{ width: "640px", height: "360px", border: "1px solid black" }}
+          >
             <p>[Tutorial Will be shown here.]</p>
           </div>
         </details>
