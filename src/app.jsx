@@ -12,17 +12,6 @@ function Header({ loggedInUser, setLoggedInUser }) {
 
   const [usernameInput, setUsernameInput] = useState('');
   const [passwordInput, setPasswordInput] = useState('');
-
-  const handleLogin = (e) => {
-    e.preventDefault();
-    if (usernameInput.trim() !== '') {
-      setLoggedInUser(usernameInput); // mock login
-      setUsernameInput('');
-      setPasswordInput('');
-    }
-
-  const [usernameInput, setUsernameInput] = useState('');
-  const [passwordInput, setPasswordInput] = useState('');
   const [error, setError] = useState('');
 
   const handleLogin = async (e) => {
@@ -47,7 +36,6 @@ function Header({ loggedInUser, setLoggedInUser }) {
     try {
       const res = await apiRegister(usernameInput, passwordInput);
       if (res.username) {
-        // optionally auto-login after register
         await apiLogin(usernameInput, passwordInput);
         setLoggedInUser(usernameInput);
         setUsernameInput('');
@@ -64,8 +52,6 @@ function Header({ loggedInUser, setLoggedInUser }) {
   const handleLogout = async () => {
     await apiLogout();
     setLoggedInUser('');
-  };
-
   };
 
   return (
@@ -97,7 +83,7 @@ function Header({ loggedInUser, setLoggedInUser }) {
               <input type="password" placeholder="password" value={passwordInput} onChange={e => setPasswordInput(e.target.value)} required />
               <button type="submit">Login</button>
               <button type="button" onClick={handleRegister}>Create Account</button>
-              {error && <div style={{color:'red'}}>{error}</div>}
+              {error && <div style={{ color: 'red' }}>{error}</div>}
             </form>
           ) : (
             <>
@@ -116,6 +102,7 @@ function Header({ loggedInUser, setLoggedInUser }) {
     </header>
   );
 }
+
 
 export default function App() {
   const [loggedInUser, setLoggedInUser] = useState('');
