@@ -4,6 +4,7 @@ import './app.css';
 import { BrowserRouter, NavLink, Route, Routes, useLocation } from 'react-router-dom';
 import Game from './game/game';
 import Leaderboard from './leaderboard/leaderboard';
+import { apiLogin, apiRegister, apiLogout } from './api';
 
 function Header({ loggedInUser, setLoggedInUser }) {
   const location = useLocation();
@@ -19,6 +20,52 @@ function Header({ loggedInUser, setLoggedInUser }) {
       setUsernameInput('');
       setPasswordInput('');
     }
+
+  const [usernameInput, setUsernameInput] = useState('');
+  const [passwordInput, setPasswordInput] = useState('');
+  const [error, setError] = useState('');
+
+  const handleLogin = async (e) => {
+    e?.preventDefault();
+    try {
+      const res = await apiLogin(usernameInput, passwordInput);
+      if (res.username) {
+        setLoggedInUser(res.username);
+        setUsernameInput('');
+        setPasswordInput('');
+        setError('');
+      } else {
+        setError(res.msg || 'Login failed');
+      }
+    } catch (err) {
+      setError('Login failed');
+    }
+  };
+
+  const handleRegister = async (e) => {
+    e?.preventDefault();
+    try {
+      const res = await apiRegister(usernameInput, passwordInput);
+      if (res.username) {
+        // optionally auto-login after register
+        await apiLogin(usernameInput, passwordInput);
+        setLoggedInUser(usernameInput);
+        setUsernameInput('');
+        setPasswordInput('');
+        setError('');
+      } else {
+        setError(res.msg || 'Register failed');
+      }
+    } catch (err) {
+      setError('Register failed');
+    }
+  };
+
+  const handleLogout = async () => {
+    await apiLogout();
+    setLoggedInUser('');
+  };
+
   };
 
   return (
@@ -46,24 +93,17 @@ function Header({ loggedInUser, setLoggedInUser }) {
         <section id="login">
           {!loggedInUser ? (
             <form onSubmit={handleLogin}>
-              <input
-                type="text"
-                placeholder="username"
-                value={usernameInput}
-                onChange={e => setUsernameInput(e.target.value)}
-                required
-              />
-              <input
-                type="password"
-                placeholder="password"
-                value={passwordInput}
-                onChange={e => setPasswordInput(e.target.value)}
-                required
-              />
+              <input type="text" placeholder="username" value={usernameInput} onChange={e => setUsernameInput(e.target.value)} required />
+              <input type="password" placeholder="password" value={passwordInput} onChange={e => setPasswordInput(e.target.value)} required />
               <button type="submit">Login</button>
+              <button type="button" onClick={handleRegister}>Create Account</button>
+              {error && <div style={{color:'red'}}>{error}</div>}
             </form>
           ) : (
-            <p>Logged in as: <strong>{loggedInUser}</strong></p>
+            <>
+              <p>Logged in as: <strong>{loggedInUser}</strong></p>
+              <button onClick={handleLogout}>Logout</button>
+            </>
           )}
         </section>
       </div>
