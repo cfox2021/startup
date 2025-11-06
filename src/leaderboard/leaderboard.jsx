@@ -1,33 +1,25 @@
 import React, { useState, useEffect } from 'react';
 import '../app.css';
+import { apiGetLeaderboard } from '../api';
 
 export default function Leaderboard({ loggedInUser }) {
   const [highscores, setHighscores] = useState([]);
 
-  const updateHighscores = () => {
-    const stored = JSON.parse(localStorage.getItem('highscores')) || {};
-    setHighscores(
-      Object.entries(stored)
-        .map(([username, score]) => ({ username, score }))
-        .sort((a, b) => b.score - a.score)
-    );
-  };
-
-  // Load highscores on mount
   useEffect(() => {
-    updateHighscores();
-
-    // Listen for storage events (high score updates)
-    const listener = () => updateHighscores();
+    let mounted = true;
+    async function load() {
+      const list = await apiGetLeaderboard();
+      if (mounted) setHighscores(list);
+    }
+    load();
+    const listener = () => load();
     window.addEventListener('storage', listener);
-    return () => window.removeEventListener('storage', listener);
+    return () => { mounted = false; window.removeEventListener('storage', listener); };
   }, []);
 
   return (
     <main>
-      <h1>High Scores</h1>
-      <p>Saved locally for each user</p>
-
+      <h1>Leaderboard</h1>
       <div id="leaderboard-container">
         <table>
           <thead>
@@ -40,7 +32,7 @@ export default function Leaderboard({ loggedInUser }) {
           <tbody>
             {highscores.length === 0 && (
               <tr>
-                <td colSpan="3">No highscores yet.</td>
+                <td colSpan="3">No scores yet.</td>
               </tr>
             )}
             {highscores.map((entry, idx) => (
