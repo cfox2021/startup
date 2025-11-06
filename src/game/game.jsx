@@ -1,6 +1,43 @@
 import React, { useState, useEffect } from 'react';
 import '../app.css';
 import { apiSubmitScore } from '../api';
+import { apiGetYouTubeVideo } from '../api';
+
+function TutorialVideo({ videoId }) {
+  const [videoData, setVideoData] = useState(null);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    let mounted = true;
+    (async () => {
+      try {
+        const data = await apiGetYouTubeVideo(videoId);
+        if (mounted) setVideoData(data);
+      } catch (e) {
+        if (mounted) setError(e.message);
+      }
+    })();
+    return () => { mounted = false; };
+  }, [videoId]);
+
+  if (error) return <div style={{ color: 'red' }}>Error loading video: {error}</div>;
+  if (!videoData) return <div>Loading video...</div>;
+
+  return (
+    <div style={{ textAlign: 'center', margin: '10px auto' }}>
+      <h3>{videoData.title}</h3>
+      <iframe
+        width="640"
+        height="360"
+        src={`https://www.youtube.com/embed/${videoId}`}
+        frameBorder="0"
+        allowFullScreen
+        title={videoData.title}
+      />
+      <p>{videoData.author_name}</p>
+    </div>
+  );
+}
 
 export default function Game({ loggedInUser }) {
   const [handPressed, setHandPressed] = useState({ left: false, right: false });
@@ -288,12 +325,7 @@ export default function Game({ loggedInUser }) {
         <h2>Tutorial Video with YouTube Data API</h2>
         <details>
           <summary>Show tutorial</summary>
-          <div
-            id="video-outline"
-            style={{ width: "640px", height: "360px", border: "1px solid black", margin: "10px auto", display: "flex", alignItems: "center", justifyContent: "center", backgroundColor: "#000" }}
-          >
-            <p style={{ color: "#fff" }}>[Tutorial Will be shown here.]</p>
-          </div>
+          <TutorialVideo videoId="TiC8pig6PGE" />
         </details>
       </section>
     </main>
