@@ -97,12 +97,12 @@ For this deliverable I did the following. I checked the box `[x]` and added a de
 
 For this deliverable I did the following. I checked the box `[x]` and added a description for things I completed.
 
-- [ ] **Node.js/Express HTTP service** - I did not complete this part of the deliverable.
-- [ ] **Static middleware for frontend** - I did not complete this part of the deliverable.
-- [ ] **Calls to third party endpoints** - I did not complete this part of the deliverable.
-- [ ] **Backend service endpoints** - I did not complete this part of the deliverable.
-- [ ] **Frontend calls service endpoints** - I did not complete this part of the deliverable.
-- [ ] **Supports registration, login, logout, and restricted endpoint** - I did not complete this part of the deliverable.
+- [x] **Node.js/Express HTTP service** - I created a backend service using node.js and express that listens on port 4000. This service handles incoming requests for user authentication and score management.
+- [x] **Static middleware for frontend** - Configured Express to serve the frontend from the public directory so users can access the game and leaderboard pages.
+- [x] **Calls to third party endpoints** - Implemented a fetch from the frontend to the Youtube Data API to display a video on the game page, which demonstrates calling a third-party service.
+- [x] **Backend service endpoints** - Added endpoints for submitting and retrieving high scores, as well as placeholders for registration, logout, and login.
+- [x] **Frontend calls service endpoints** - The frontend uses fetch requests to the backend endpoints to submit and retrieve high scores dynamically.
+- [x] **Supports registration, login, logout, and restricted endpoint** - I implemented the basic structure for user registration and login, with authentication checks on score submission to ensure only logged-in users can submit highscores.
 
 
 ## 🚀 DB deliverable
