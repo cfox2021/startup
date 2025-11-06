@@ -25,7 +25,7 @@ function TutorialVideo({ videoId }) {
 
   return (
     <div style={{ textAlign: 'center', margin: '10px auto' }}>
-      <h3>{videoData.title}</h3>
+      <h3>{"Random Video. Did not have time to make tutorial video."}</h3>
       <iframe
         width="640"
         height="360"
@@ -34,7 +34,6 @@ function TutorialVideo({ videoId }) {
         allowFullScreen
         title={videoData.title}
       />
-      <p>{videoData.author_name}</p>
     </div>
   );
 }
