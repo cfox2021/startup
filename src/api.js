@@ -35,7 +35,7 @@ export async function apiSubmitScore(score) {
 }
 
 export async function apiGetYouTubeVideo(videoId) {
-  const r = await fetch(`https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=${TiC8pig6PGE}&format=json`);
+  const r = await fetch(`https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=${videoId}&format=json`);
   if (!r.ok) throw new Error('Failed to load video data');
   return r.json();
 }

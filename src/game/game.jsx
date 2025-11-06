@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import '../app.css';
+import { apiSubmitScore } from '../api';
 
 export default function Game({ loggedInUser }) {
   const [handPressed, setHandPressed] = useState({ left: false, right: false });
@@ -76,32 +77,38 @@ export default function Game({ loggedInUser }) {
           return !inZone;
         });
 
-        if (hit) {
-          const points = 1 * multiplier;
-          const newCombo = combo + 1;
-          setScore(prev => prev + points);
-          setCombo(newCombo);
-          setHighScore(prev => Math.max(prev, score + points));
+  if (hit) {
+    const points = 1 * multiplier;
+    const newCombo = combo + 1;
 
-          let newMultiplier = 1;
-          if (newCombo >= 101) newMultiplier = 10;
-          else if (newCombo >= 51) newMultiplier = 5;
-          else if (newCombo >= 26) newMultiplier = 3;
-          else if (newCombo >= 11) newMultiplier = 2;
-          setMultiplier(newMultiplier);
+    // update score and highScore atomically
+    setScore(prevScore => {
+      const newScore = prevScore + points;
+      setHighScore(prevHigh => Math.max(prevHigh, newScore));
+      return newScore;
+    });
 
-          let newDisplayMultiplier = 1;
-          if (newCombo >= 10 && newCombo < 25) newDisplayMultiplier = 2;
-          else if (newCombo >= 25 && newCombo < 50) newDisplayMultiplier = 3;
-          else if (newCombo >= 50 && newCombo < 100) newDisplayMultiplier = 5;
-          else if (newCombo >= 100) newDisplayMultiplier = 10;
-          setDisplayMultiplier(newDisplayMultiplier);
-        } else {
-          setCombo(0);
-          setMultiplier(1);
-          setDisplayMultiplier(1);
-        }
+    setCombo(newCombo);
 
+    // multiplier logic
+    let newMultiplier = 1;
+    if (newCombo >= 101) newMultiplier = 10;
+    else if (newCombo >= 51) newMultiplier = 5;
+    else if (newCombo >= 26) newMultiplier = 3;
+    else if (newCombo >= 11) newMultiplier = 2;
+    setMultiplier(newMultiplier);
+
+    let newDisplayMultiplier = 1;
+    if (newCombo >= 10 && newCombo < 25) newDisplayMultiplier = 2;
+    else if (newCombo >= 25 && newCombo < 50) newDisplayMultiplier = 3;
+    else if (newCombo >= 50 && newCombo < 100) newDisplayMultiplier = 5;
+    else if (newCombo >= 100) newDisplayMultiplier = 10;
+    setDisplayMultiplier(newDisplayMultiplier);
+  } else {
+    setCombo(0);
+    setMultiplier(1);
+    setDisplayMultiplier(1);
+  }
         return remaining;
       });
     };
@@ -112,18 +119,38 @@ export default function Game({ loggedInUser }) {
 
   // Save high score locally for logged-in users
   useEffect(() => {
-    if (!loggedInUser) return;
+    if (!loggedInUser) {
+      const stored = JSON.parse(localStorage.getItem('highscores')) || {};
+      const prevHigh = stored[loggedInUser] || 0;
+      if (highScore > prevHigh && loggedInUser) {
+        stored[loggedInUser] = highScore;
+        localStorage.setItem('highscores', JSON.stringify(stored));
 
-    const stored = JSON.parse(localStorage.getItem('highscores')) || {};
-    const prevHigh = stored[loggedInUser] || 0;
-
-    if (highScore > prevHigh) {
-      stored[loggedInUser] = highScore;
-      localStorage.setItem('highscores', JSON.stringify(stored));
-
-      // Trigger storage event so leaderboard updates immediately
-      window.dispatchEvent(new Event('storage'));
+        // dispatch custom event
+        const updateLeaderboard = new CustomEvent('leaderboardUpdate');
+        window.dispatchEvent(updateLeaderboard);
+      }
+      return;
     }
+
+    // Logged in: send score to backend
+    (async () => {
+      try {
+        await apiSubmitScore(Number(highScore));
+
+        // dispatch custom event
+        const updateLeaderboard = new CustomEvent('leaderboardUpdate');
+        window.dispatchEvent(updateLeaderboard);
+      } catch (e) {
+        const stored = JSON.parse(localStorage.getItem('highscores')) || {};
+        stored[loggedInUser] = Math.max(stored[loggedInUser] || 0, highScore);
+        localStorage.setItem('highscores', JSON.stringify(stored));
+
+        // dispatch custom event
+        const updateLeaderboard = new CustomEvent('leaderboardUpdate');
+        window.dispatchEvent(updateLeaderboard);
+      }
+    })();
   }, [highScore, loggedInUser]);
 
   return (

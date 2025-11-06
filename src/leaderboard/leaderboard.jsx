@@ -13,8 +13,8 @@ export default function Leaderboard({ loggedInUser }) {
     }
     load();
     const listener = () => load();
-    window.addEventListener('storage', listener);
-    return () => { mounted = false; window.removeEventListener('storage', listener); };
+    window.addEventListener('leaderboardUpdate', listener);
+    return () => { mounted = false; window.removeEventListener('leaderboardUpdate', listener); };
   }, []);
 
   return (
@@ -39,7 +39,7 @@ export default function Leaderboard({ loggedInUser }) {
               <tr key={entry.username}>
                 <td>{idx + 1}</td>
                 <td>{entry.username}</td>
-                <td>{entry.score}</td>
+                <td>{entry.bestScore}</td>
               </tr>
             ))}
           </tbody>
