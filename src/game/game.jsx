@@ -47,6 +47,7 @@ export default function Game({ loggedInUser }) {
   const [highScore, setHighScore] = useState(0);
   const [multiplier, setMultiplier] = useState(1);
   const [displayMultiplier, setDisplayMultiplier] = useState(1);
+  const [running, setRunning] = useState(false); // new
 
   const containerWidth = 960;
   const bongoWidth = 220;
@@ -61,16 +62,23 @@ export default function Game({ loggedInUser }) {
   const leftBongoLeft = containerWidth / 2 - bongoGap / 2 - bongoWidth / 2;
   const rightBongoLeft = containerWidth / 2 + bongoGap / 2 - bongoWidth / 2;
 
+  const bongoSound = new Audio('/sounds/bongo.wav');
+
   // Spawn falling notes
   useEffect(() => {
+    if (!running) return;
+
     const interval = setInterval(() => {
       setNotes(prev => [...prev, { id: Date.now(), side: Math.random() < 0.5 ? 'left' : 'right', y: 0 }]);
     }, 1200);
+
     return () => clearInterval(interval);
-  }, []);
+  }, [running]);
 
   // Move notes downward
   useEffect(() => {
+    if (!running) return;
+
     const fps = 60;
     const interval = 1000 / fps;
     const fallSpeed = 6;
@@ -93,11 +101,13 @@ export default function Game({ loggedInUser }) {
     }, interval);
 
     return () => clearInterval(moveInterval);
-  }, []);
+  }, [running, hitZoneTop]);
 
   // Handle key presses
   useEffect(() => {
     const handleKeyDown = (e) => {
+      if (!running) return; // stop key handling if game isn't running
+
       let side = null;
       if (e.key === 'f' || e.key === 'F') side = 'left';
       if (e.key === 'j' || e.key === 'J') side = 'right';
@@ -114,45 +124,45 @@ export default function Game({ loggedInUser }) {
           return !inZone;
         });
 
-  if (hit) {
-    const points = 1 * multiplier;
-    const newCombo = combo + 1;
+        if (hit) {
+          bongoSound.currentTime = 0, bongoSound.play();
+          const points = 1 * multiplier;
+          const newCombo = combo + 1;
 
-    // update score and highScore atomically
-    setScore(prevScore => {
-      const newScore = prevScore + points;
-      setHighScore(prevHigh => Math.max(prevHigh, newScore));
-      return newScore;
-    });
+          setScore(prevScore => {
+            const newScore = prevScore + points;
+            setHighScore(prevHigh => Math.max(prevHigh, newScore));
+            return newScore;
+          });
 
-    setCombo(newCombo);
+          setCombo(newCombo);
 
-    // multiplier logic
-    let newMultiplier = 1;
-    if (newCombo >= 101) newMultiplier = 10;
-    else if (newCombo >= 51) newMultiplier = 5;
-    else if (newCombo >= 26) newMultiplier = 3;
-    else if (newCombo >= 11) newMultiplier = 2;
-    setMultiplier(newMultiplier);
+          let newMultiplier = 1;
+          if (newCombo >= 101) newMultiplier = 10;
+          else if (newCombo >= 51) newMultiplier = 5;
+          else if (newCombo >= 26) newMultiplier = 3;
+          else if (newCombo >= 11) newMultiplier = 2;
+          setMultiplier(newMultiplier);
 
-    let newDisplayMultiplier = 1;
-    if (newCombo >= 10 && newCombo < 25) newDisplayMultiplier = 2;
-    else if (newCombo >= 25 && newCombo < 50) newDisplayMultiplier = 3;
-    else if (newCombo >= 50 && newCombo < 100) newDisplayMultiplier = 5;
-    else if (newCombo >= 100) newDisplayMultiplier = 10;
-    setDisplayMultiplier(newDisplayMultiplier);
-  } else {
-    setCombo(0);
-    setMultiplier(1);
-    setDisplayMultiplier(1);
-  }
+          let newDisplayMultiplier = 1;
+          if (newCombo >= 10 && newCombo < 25) newDisplayMultiplier = 2;
+          else if (newCombo >= 25 && newCombo < 50) newDisplayMultiplier = 3;
+          else if (newCombo >= 50 && newCombo < 100) newDisplayMultiplier = 5;
+          else if (newCombo >= 100) newDisplayMultiplier = 10;
+          setDisplayMultiplier(newDisplayMultiplier);
+        } else {
+          setCombo(0);
+          setMultiplier(1);
+          setDisplayMultiplier(1);
+        }
+
         return remaining;
       });
     };
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [score, combo, multiplier, hitZoneTop]);
+  }, [score, combo, multiplier, hitZoneTop, running]);
 
   // Save high score locally for logged-in users
   useEffect(() => {
@@ -162,36 +172,50 @@ export default function Game({ loggedInUser }) {
       if (highScore > prevHigh && loggedInUser) {
         stored[loggedInUser] = highScore;
         localStorage.setItem('highscores', JSON.stringify(stored));
-
-        // dispatch custom event
-        const updateLeaderboard = new CustomEvent('leaderboardUpdate');
-        window.dispatchEvent(updateLeaderboard);
+        window.dispatchEvent(new CustomEvent('leaderboardUpdate'));
       }
       return;
     }
 
-    // Logged in: send score to backend
     (async () => {
       try {
         await apiSubmitScore(Number(highScore));
-
-        // dispatch custom event
-        const updateLeaderboard = new CustomEvent('leaderboardUpdate');
-        window.dispatchEvent(updateLeaderboard);
+        window.dispatchEvent(new CustomEvent('leaderboardUpdate'));
       } catch (e) {
         const stored = JSON.parse(localStorage.getItem('highscores')) || {};
         stored[loggedInUser] = Math.max(stored[loggedInUser] || 0, highScore);
         localStorage.setItem('highscores', JSON.stringify(stored));
-
-        // dispatch custom event
-        const updateLeaderboard = new CustomEvent('leaderboardUpdate');
-        window.dispatchEvent(updateLeaderboard);
+        window.dispatchEvent(new CustomEvent('leaderboardUpdate'));
       }
     })();
   }, [highScore, loggedInUser]);
 
+  const startGame = () => {
+    setRunning(true);
+    setNotes([]);
+    setScore(0);
+    setCombo(0);
+    setMultiplier(1);
+    setDisplayMultiplier(1);
+  };
+
+const stopGame = () => {
+  setRunning(false);
+  setNotes([]);
+  setScore(0);
+  setCombo(0);
+  setMultiplier(1);
+  setDisplayMultiplier(1);
+};
+
   return (
     <main>
+      {/* Start/Stop buttons */}
+      <div style={{ textAlign: 'center', margin: '10px' }}>
+        <button onClick={startGame}>Start</button>
+        <button onClick={stopGame}>Reset</button>
+      </div>
+
       <div
         id="game-outline"
         style={{
