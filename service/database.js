@@ -1,5 +1,7 @@
 import { MongoClient } from 'mongodb';
-import config from './dbConfig.json' assert { type: 'json' };
+import { createRequire } from 'module';  // ← add this
+const require = createRequire(import.meta.url);  // ← add this
+const config = require('./dbConfig.json');  // ← add this
 
 const url = `mongodb+srv://${config.userName}:${config.password}@${config.hostname}`;
 const client = new MongoClient(url);
