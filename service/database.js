@@ -5,8 +5,9 @@ const url = `mongodb+srv://${config.userName}:${config.password}@${config.hostna
 const client = new MongoClient(url);
 
 const db = client.db('startup');
+const users = db.collection('users');
 
-// Test the DB connection on startup
+// Test connection
 (async function testConnection() {
   try {
     await client.connect();
@@ -18,6 +19,26 @@ const db = client.db('startup');
   }
 })();
 
+// USER FUNCTIONS
+function getUser(username) {
+  return users.findOne({ username });
+}
+
+function getUserByToken(token) {
+  return users.findOne({ token });
+}
+
+async function addUser(user) {
+  await users.insertOne(user);
+}
+
+async function updateUser(user) {
+  await users.updateOne({ username: user.username }, { $set: user });
+}
+
 module.exports = {
-  db,
+  getUser,
+  getUserByToken,
+  addUser,
+  updateUser,
 };
