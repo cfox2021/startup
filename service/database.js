@@ -7,6 +7,8 @@ const client = new MongoClient(url);
 const db = client.db('startup');
 const users = db.collection('users');
 
+const scores = db.collection('scores');
+
 // Test connection
 (async function testConnection() {
   try {
@@ -36,9 +38,24 @@ async function updateUser(user) {
   await users.updateOne({ username: user.username }, { $set: user });
 }
 
+// SCORE FUNCTIONS
+async function addScore(scoreDoc) {
+  await scores.insertOne(scoreDoc);
+}
+
+function getHighScores() {
+  return scores
+    .find({})
+    .sort({ score: -1 })
+    .limit(10)
+    .toArray();
+}
+
 module.exports = {
   getUser,
   getUserByToken,
   addUser,
   updateUser,
+  addScore,
+  getHighScores,
 };
