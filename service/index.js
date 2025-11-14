@@ -122,6 +122,10 @@ app.post('/api/score', verifyAuth, async (req, res) => {
 // Status
 app.get('/api/status', (_req, res) => res.json({ status: 'ok' }));
 
+app.get('*', (_req, res) => {
+  res.sendFile('index.html', { root: 'public' });
+});
+
 // Error handler
 app.use((err, _req, res, _next) => {
   res.status(500).json({ type: err.name, message: err.message });

@@ -130,7 +130,7 @@ export default function Game({ loggedInUser }) {
 
           setScore(prevScore => {
             const newScore = prevScore + points;
-            setHighScore(prevHigh => Math.max(prevHigh, newScore));
+            setHighScore(prevHigh => Math.max(prevHigh, newScore)); // updates highScore immediately
             return newScore;
           });
 
@@ -165,29 +165,22 @@ export default function Game({ loggedInUser }) {
 
   // Save high score locally for logged-in users
   useEffect(() => {
-    if (!loggedInUser) {
-      const stored = JSON.parse(localStorage.getItem('highscores')) || {};
-      const prevHigh = stored[loggedInUser] || 0;
-      if (highScore > prevHigh && loggedInUser) {
-        stored[loggedInUser] = highScore;
-        localStorage.setItem('highscores', JSON.stringify(stored));
-        window.dispatchEvent(new CustomEvent('leaderboardUpdate'));
-      }
-      return;
-    }
+    if (!loggedInUser || highScore <= 0) return;
+
+    let isMounted = true;
 
     (async () => {
       try {
-        await apiSubmitScore(Number(highScore));
-        window.dispatchEvent(new CustomEvent('leaderboardUpdate'));
+        await apiSubmitScore(highScore);
+        if (isMounted) window.dispatchEvent(new CustomEvent('leaderboardUpdate'));
       } catch (e) {
-        const stored = JSON.parse(localStorage.getItem('highscores')) || {};
-        stored[loggedInUser] = Math.max(stored[loggedInUser] || 0, highScore);
-        localStorage.setItem('highscores', JSON.stringify(stored));
-        window.dispatchEvent(new CustomEvent('leaderboardUpdate'));
+        console.error('Failed to submit high score:', e);
       }
     })();
+
+    return () => { isMounted = false; };
   }, [highScore, loggedInUser]);
+
 
   const startGame = () => {
     setRunning(true);
@@ -206,6 +199,7 @@ const stopGame = () => {
   setMultiplier(1);
   setDisplayMultiplier(1);
 };
+
 
   return (
     <main>

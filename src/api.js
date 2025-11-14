@@ -28,7 +28,8 @@ export async function apiGetLeaderboard() {
 export async function apiSubmitScore(score) {
   const r = await fetch('/api/score', {
     method: 'POST',
-    headers: { 'content-type': 'application/json' },
+    headers: { 'Content-Type': 'application/json' },
+    credentials: 'include', // ← required for auth cookie
     body: JSON.stringify({ score })
   });
   return r.json();

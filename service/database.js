@@ -36,9 +36,19 @@ export function updateUser(user) {
 }
 
 // SCORE FUNCTIONS
-export function addScore(scoreDoc) {
-  return scores.insertOne(scoreDoc);
+export async function addScore(scoreDoc) {
+  const { username, score } = scoreDoc;
+
+  // Insert new score
+  await scores.insertOne(scoreDoc);
+
+  // Update bestScore if this is a new high
+  await users.updateOne(
+    { username },
+    { $max: { bestScore: score } } // only updates if score > current bestScore
+  );
 }
+
 
 export function getHighScores() {
   return users
@@ -46,4 +56,8 @@ export function getHighScores() {
     .sort({ bestScore: -1 })
     .limit(10)
     .toArray();
+}
+
+export function getUserByToken(token) {
+  return users.findOne({ token });
 }
