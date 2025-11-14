@@ -1,12 +1,11 @@
-const { MongoClient } = require('mongodb');
-const config = require('./dbConfig.json');
+import { MongoClient } from 'mongodb';
+import config from './dbConfig.json' assert { type: 'json' };
 
 const url = `mongodb+srv://${config.userName}:${config.password}@${config.hostname}`;
 const client = new MongoClient(url);
 
 const db = client.db('startup');
 const users = db.collection('users');
-
 const scores = db.collection('scores');
 
 // Test connection
@@ -22,40 +21,27 @@ const scores = db.collection('scores');
 })();
 
 // USER FUNCTIONS
-function getUser(username) {
+export function getUser(username) {
   return users.findOne({ username });
 }
 
-function getUserByToken(token) {
-  return users.findOne({ token });
+export function addUser(user) {
+  return users.insertOne(user);
 }
 
-async function addUser(user) {
-  await users.insertOne(user);
-}
-
-async function updateUser(user) {
-  await users.updateOne({ username: user.username }, { $set: user });
+export function updateUser(user) {
+  return users.updateOne({ username: user.username }, { $set: user });
 }
 
 // SCORE FUNCTIONS
-async function addScore(scoreDoc) {
-  await scores.insertOne(scoreDoc);
+export function addScore(scoreDoc) {
+  return scores.insertOne(scoreDoc);
 }
 
-function getHighScores() {
+export function getHighScores() {
   return scores
     .find({})
     .sort({ score: -1 })
     .limit(10)
     .toArray();
 }
-
-module.exports = {
-  getUser,
-  getUserByToken,
-  addUser,
-  updateUser,
-  addScore,
-  getHighScores,
-};
