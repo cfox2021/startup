@@ -98,17 +98,25 @@ app.get('/api/leaderboard', async (req, res) => {
 });
 
 // Submit Score
+// Submit Score
 app.post('/api/score', verifyAuth, async (req, res) => {
   const { score } = req.body;
-  if (typeof score !== 'number')
-    return res.status(400).send({ msg: 'score must be number' });
+  if (typeof score !== 'number') return res.status(400).send({ msg: 'score must be number' });
 
   const username = req.username;
 
-  await DB.addScore({ username, score });
+  // Get current user
+  const user = await DB.getUser(username);
+  if (!user) return res.status(404).send({ msg: 'User not found' });
 
-  const highs = await DB.getHighScores();
-  res.json(highs);
+  // Update bestScore if new score is higher
+  const bestScore = Math.max(user.bestScore || 0, score);
+  user.bestScore = bestScore;
+  await DB.updateUser(user);
+
+  // Return top 10 users sorted by bestScore
+  const leaderboard = await DB.getHighScores(); // modify getHighScores to return users with bestScore
+  res.json(leaderboard);
 });
 
 // Status

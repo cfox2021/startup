@@ -41,9 +41,9 @@ export function addScore(scoreDoc) {
 }
 
 export function getHighScores() {
-  return scores
-    .find({})
-    .sort({ score: -1 })
+  return users
+    .find({}, { projection: { username: 1, bestScore: 1, _id: 0 } })
+    .sort({ bestScore: -1 })
     .limit(10)
     .toArray();
 }
