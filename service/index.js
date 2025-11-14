@@ -3,88 +3,118 @@ import cookieParser from 'cookie-parser';
 import bcrypt from 'bcryptjs';
 import { v4 as uuidv4 } from 'uuid';
 
+import * as DB from './database.js';
+
 const app = express();
 const port = process.argv.length > 2 ? process.argv[2] : 4000;
 
 app.use(express.json());
 app.use(cookieParser());
-app.use(express.static('public')); 
+app.use(express.static('public'));
 
-const users = {};    
-const sessions = {}; 
+const authCookieName = 'token';
 
-function verifyAuth(req, res, next) {
-  const token = req.cookies?.token;
-  const username = token && sessions[token];
-  if (username) {
-    req.username = username;
-    return next();
-  }
-  res.status(401).send({ msg: 'Unauthorized' });
+// AUTH MIDDLEWARE
+async function verifyAuth(req, res, next) {
+  const token = req.cookies?.[authCookieName];
+  if (!token) return res.status(401).send({ msg: 'Unauthorized' });
+
+  const user = await DB.getUserByToken(token);
+  if (!user) return res.status(401).send({ msg: 'Unauthorized' });
+
+  req.username = user.username;
+  next();
 }
 
+// ROUTES
+
+// Register
 app.post('/api/register', async (req, res) => {
   const { username, password } = req.body || {};
-  if (!username || !password) return res.status(400).send({ msg: 'Missing username or password' });
-  if (users[username]) return res.status(409).send({ msg: 'User exists' });
+  if (!username || !password)
+    return res.status(400).send({ msg: 'Missing username or password' });
+
+  const existing = await DB.getUser(username);
+  if (existing) return res.status(409).send({ msg: 'User exists' });
+
   const passwordHash = await bcrypt.hash(password, 10);
-  users[username] = { passwordHash, bestScore: 0 };
-  res.status(200).send({ username });
+
+  const user = {
+    username,
+    passwordHash,
+    bestScore: 0,
+    token: uuidv4(),
+  };
+
+  await DB.addUser(user);
+
+  res.cookie(authCookieName, user.token, {
+    httpOnly: true,
+    sameSite: 'strict',
+  });
+
+  res.send({ username });
 });
 
+// Login
 app.post('/api/login', async (req, res) => {
   const { username, password } = req.body || {};
-  const user = users[username];
+
+  const user = await DB.getUser(username);
   if (!user) return res.status(401).send({ msg: 'Invalid credentials' });
+
   const ok = await bcrypt.compare(password, user.passwordHash);
   if (!ok) return res.status(401).send({ msg: 'Invalid credentials' });
 
-  const token = uuidv4();
-  sessions[token] = username;
-  res.cookie('token', token, { httpOnly: true, sameSite: 'strict' });
-  res.status(200).send({ username });
+  user.token = uuidv4();
+  await DB.updateUser(user);
+
+  res.cookie(authCookieName, user.token, {
+    httpOnly: true,
+    sameSite: 'strict',
+  });
+
+  res.send({ username });
 });
 
-app.post('/api/logout', (req, res) => {
-  const token = req.cookies?.token;
+// Logout
+app.post('/api/logout', async (req, res) => {
+  const token = req.cookies?.[authCookieName];
   if (token) {
-    delete sessions[token];
-    res.clearCookie('token');
+    const user = await DB.getUserByToken(token);
+    if (user) {
+      delete user.token;
+      await DB.updateUser(user);
+    }
   }
+  res.clearCookie(authCookieName);
   res.status(204).end();
 });
 
-app.get('/api/leaderboard', (req, res) => {
-  const list = Object.entries(users)
-    .map(([username, u]) => ({ username, bestScore: u.bestScore }))
-    .sort((a,b) => b.bestScore - a.bestScore)
-    .slice(0, 10);
-  res.json(list);
+// Leaderboard
+app.get('/api/leaderboard', async (req, res) => {
+  const scores = await DB.getHighScores();
+  res.json(scores);
 });
 
-app.post('/api/score', verifyAuth, (req, res) => {
-  const { score } = req.body || {};
-  if (typeof score !== 'number') return res.status(400).send({ msg: 'score must be number' });
+// Submit Score
+app.post('/api/score', verifyAuth, async (req, res) => {
+  const { score } = req.body;
+  if (typeof score !== 'number')
+    return res.status(400).send({ msg: 'score must be number' });
 
   const username = req.username;
-  const user = users[username];
-  if (score > user.bestScore) user.bestScore = score;
 
-  res.json({ username, bestScore: user.bestScore });
+  await DB.addScore({ username, score });
+
+  const highs = await DB.getHighScores();
+  res.json(highs);
 });
 
-app.get('/api/quote', async (req, res) => {
-  try {
-    const r = await fetch('https://api.quotable.io/random');
-    const data = await r.json();
-    res.json(data);
-  } catch (e) {
-    res.status(502).json({ msg: 'Quote service failed' });
-  }
-});
-
+// Status
 app.get('/api/status', (_req, res) => res.json({ status: 'ok' }));
 
+// Error handler
 app.use((err, _req, res, _next) => {
   res.status(500).json({ type: err.name, message: err.message });
 });
