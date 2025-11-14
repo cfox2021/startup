@@ -109,8 +109,8 @@ For this deliverable I did the following. I checked the box `[x]` and added a de
 
 For this deliverable I did the following. I checked the box `[x]` and added a description for things I completed.
 
-- [ ] **Stores data in MongoDB** - I did not complete this part of the deliverable.
-- [ ] **Stores credentials in MongoDB** - I did not complete this part of the deliverable.
+- [x] **Stores data in MongoDB** - High scores and user data are now saved in a MongoDB database. When a user achieves a new high score, it is automatically submitted to the backend service and persisted, ensuring that the leaderboard reflects the most recent scores.
+- [x] **Stores credentials in MongoDB** - User registration and login credentials, including hashed passwords, are securely stored in MongoDB. Authentication checks on login and score submission verify the user’s identity before granting access or updating scores.
 
 ## 🚀 WebSocket deliverable
 
